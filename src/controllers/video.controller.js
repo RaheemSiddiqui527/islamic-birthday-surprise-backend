@@ -55,11 +55,12 @@ export async function updateVideo(req, res, next) {
       return res.status(404).json({ success: false, error: 'Video not found' });
     }
 
-    const { title, description, videoUrl, isGoogleFlow, isPublished, sortOrder } = req.body;
+    const { title, description, videoUrl, videoType, isGoogleFlow, isPublished, sortOrder } = req.body;
 
     if (title !== undefined) video.title = title;
     if (description !== undefined) video.description = description;
     if (videoUrl !== undefined) video.videoUrl = videoUrl;
+    if (videoType !== undefined) video.videoType = videoType;
     if (isGoogleFlow !== undefined) video.isGoogleFlow = isGoogleFlow;
     if (isPublished !== undefined) video.isPublished = isPublished;
     if (sortOrder !== undefined) video.sortOrder = sortOrder;

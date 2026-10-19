@@ -64,10 +64,18 @@ const mediaCorsMiddleware = (req, res, next) => {
   next();
 };
 
-app.use('/uploads', mediaCorsMiddleware, express.static(config.paths.uploads));
-if (fs.existsSync(config.paths.legacyUploads) && config.paths.legacyUploads !== config.paths.uploads) {
-  app.use('/uploads', mediaCorsMiddleware, express.static(config.paths.legacyUploads));
-}
+const potentialUploadDirs = [
+  config.paths.uploads,
+  path.join(config.paths.server, 'public/uploads'),
+  path.join(config.paths.root, 'public/uploads'),
+  config.paths.legacyUploads
+];
+
+potentialUploadDirs.forEach((dir) => {
+  if (dir && fs.existsSync(dir)) {
+    app.use('/uploads', mediaCorsMiddleware, express.static(dir));
+  }
+});
 
 // Client build static serving for production single-port deployment
 const clientDistPath = path.join(config.paths.root, 'client/dist');
